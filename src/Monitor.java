@@ -33,6 +33,10 @@ public class Monitor {
 
         final TaskProcessor processor = new TaskProcessor();
         final TaskMonitor monitor = new TaskMonitor();
+
+        // Since the Runnable/Callable interfaces are typically expected to be used alongside a ThreadPool we need
+        // to use the FutureTask class. It is a class that provides us access to some results in the future.  It allows
+        // us to pass our Runnable to the likes of ``new Thread``
         final FutureTask<Double> processorFuture = new FutureTask<>(processor);
 
         final Thread processorThread = new Thread(processorFuture);
@@ -44,6 +48,7 @@ public class Monitor {
         processorThread.join();
         monitor.setKeepRunning(false);
         monitorThread.join();
+        // When .get is called on a Future it will return the result of our task
         return processorFuture.get();
 
     }
